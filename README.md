@@ -1,0 +1,2 @@
+# gannicus.github.io
+blog

@@ -174,20 +174,20 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "80a9fd80710a7153",
+  "active": "bfa4bfa4d0013b92",
   "lastOpenFiles": [
     "_site/jekyll/update/2025/11/03/welcome-to-jekyll.html",
     "_site/jekyll/update/2025/11/03",
     "_site/jekyll/update/2025/11",
     "_site/jekyll/update/2025",
     "_site/jekyll/update",
-    "_site/assets/minima-social-icons.svg",
-    "_site/assets/main.css.map",
-    "_site/assets/main.css",
     "_site/about/index.html",
-    "_site/jekyll",
     "_site/README.md",
+    "_site/jekyll",
     "_site/index.html",
-    "_site/feed.xml"
+    "_site/feed.xml",
+    "_site/about",
+    "_site/404.html",
+    "_site/assets/minima-social-icons.svg"
   ]
 }

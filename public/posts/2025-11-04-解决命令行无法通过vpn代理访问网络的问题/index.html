@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>解决命令行无法通过VPN代理访问网络的问题! | Gannicus&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="解决在Windows上命令行无法通过VPN代理访问网络的问题
+问题描述
+当VPN开启时，网页浏览器可以正常访问Google等网站，但在命令行（CMD）或PowerShell中，ping、curl 等工具无法访问这些网站，通常表现为连接超时。
+这通常是因为VPN客户端默认只代理了浏览器或特定应用的流量（分裂隧道模式），而没有为整个系统或命令行环境设置全局代理。
+解决步骤
+1. 初步诊断
+首先，我们确认问题确实存在于命令行环境中。
+
+测试外部连接 (Google):
+ping google.com
+# 结果: 100%丢包，请求超时
+
+测试内部连接 (Baidu):
+ping baidu.com
+# 结果: 成功接收数据，延迟正常
+
+结论: 网络本身是通的，但命令行无法访问被限制的网站，问题指向代理设置。
+
+2. 检查系统代理设置
+我们检查Windows系统级别的代理设置，看是否有为命令行工具配置代理。
+
+使用 netsh 命令检查:
+netsh winhttp show proxy
+
+���型的问题输出:
+当前的 WinHTTP 代理服务器设置:
+
+    直接访问(没有代理服务器)。
+
+结论: 系统并未配置全局代理，这解释了为什么命令行工具无法通过VPN。
+
+3. 寻找并测试VPN代理
+多数VPN客户端会在本地启动一个HTTP或SOCKS5代理服务。我们需要找到这个服务的地址和端口，并进行测试。
+
+常见的本地代理地址: 127.0.0.1 (或 localhost)
+常见的代理端口: 7890, 1080, 10809, 8888 等 (具体请在您的VPN客户端设置中查找)。
+
+我们使用 curl 命令直接指定代理进行测试，这是最关键的一步。假设通过VPN客户端查到代理是SOCKS5类型，地址是 127.0.0.1:7890。
+
+
+使用 curl 指定SOCKS5代理进行测试:
+curl -v --socks5 127.0.0.1:7890 https://www.google.com
+
+
+成功的标志:
+您会看到 * SOCKS5 request granted. 和 * Connected to 127.0.0.1 ... 等信息，最后是Google服务器返回的HTTP响应（例如 HTTP/1.1 301 Moved Permanently 或 HTTP/2 200）。">
+    <meta name="generator" content="Hugo 0.152.2">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    
+
+    
+<link rel="stylesheet" href="/ananke/css/main.min.css" >
+
+
+
+
+    
+
+
+    
+      
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/posts/2025-11-04-%E8%A7%A3%E5%86%B3%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87vpn%E4%BB%A3%E7%90%86%E8%AE%BF%E9%97%AE%E7%BD%91%E7%BB%9C%E7%9A%84%E9%97%AE%E9%A2%98/">
+    
+
+    <meta property="og:url" content="http://localhost:1313/posts/2025-11-04-%E8%A7%A3%E5%86%B3%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87vpn%E4%BB%A3%E7%90%86%E8%AE%BF%E9%97%AE%E7%BD%91%E7%BB%9C%E7%9A%84%E9%97%AE%E9%A2%98/">
+  <meta property="og:site_name" content="Gannicus&#39;s Blog">
+  <meta property="og:title" content="解决命令行无法通过VPN代理访问网络的问题!">
+  <meta property="og:description" content="解决在Windows上命令行无法通过VPN代理访问网络的问题 问题描述 当VPN开启时，网页浏览器可以正常访问Google等网站，但在命令行（CMD）或PowerShell中，ping、curl 等工具无法访问这些网站，通常表现为连接超时。
+这通常是因为VPN客户端默认只代理了浏览器或特定应用的流量（分裂隧道模式），而没有为整个系统或命令行环境设置全局代理。
+解决步骤 1. 初步诊断 首先，我们确认问题确实存在于命令行环境中。
+测试外部连接 (Google): ping google.com # 结果: 100%丢包，请求超时 测试内部连接 (Baidu): ping baidu.com # 结果: 成功接收数据，延迟正常 结论: 网络本身是通的，但命令行无法访问被限制的网站，问题指向代理设置。 2. 检查系统代理设置 我们检查Windows系统级别的代理设置，看是否有为命令行工具配置代理。
+使用 netsh 命令检查: netsh winhttp show proxy ���型的问题输出: 当前的 WinHTTP 代理服务器设置: 直接访问(没有代理服务器)。 结论: 系统并未配置全局代理，这解释了为什么命令行工具无法通过VPN。 3. 寻找并测试VPN代理 多数VPN客户端会在本地启动一个HTTP或SOCKS5代理服务。我们需要找到这个服务的地址和端口，并进行测试。
+常见的本地代理地址: 127.0.0.1 (或 localhost) 常见的代理端口: 7890, 1080, 10809, 8888 等 (具体请在您的VPN客户端设置中查找)。 我们使用 curl 命令直接指定代理进行测试，这是最关键的一步。假设通过VPN客户端查到代理是SOCKS5类型，地址是 127.0.0.1:7890。
+使用 curl 指定SOCKS5代理进行测试:
+curl -v --socks5 127.0.0.1:7890 https://www.google.com 成功的标志: 您会看到 * SOCKS5 request granted. 和 * Connected to 127.0.0.1 ... 等信息，最后是Google服务器返回的HTTP响应（例如 HTTP/1.1 301 Moved Permanently 或 HTTP/2 200）。">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-11-03T10:55:00+00:00">
+    <meta property="article:modified_time" content="2025-11-03T10:55:00+00:00">
+
+  <meta itemprop="name" content="解决命令行无法通过VPN代理访问网络的问题!">
+  <meta itemprop="description" content="解决在Windows上命令行无法通过VPN代理访问网络的问题 问题描述 当VPN开启时，网页浏览器可以正常访问Google等网站，但在命令行（CMD）或PowerShell中，ping、curl 等工具无法访问这些网站，通常表现为连接超时。
+这通常是因为VPN客户端默认只代理了浏览器或特定应用的流量（分裂隧道模式），而没有为整个系统或命令行环境设置全局代理。
+解决步骤 1. 初步诊断 首先，我们确认问题确实存在于命令行环境中。
+测试外部连接 (Google): ping google.com # 结果: 100%丢包，请求超时 测试内部连接 (Baidu): ping baidu.com # 结果: 成功接收数据，延迟正常 结论: 网络本身是通的，但命令行无法访问被限制的网站，问题指向代理设置。 2. 检查系统代理设置 我们检查Windows系统级别的代理设置，看是否有为命令行工具配置代理。
+使用 netsh 命令检查: netsh winhttp show proxy ���型的问题输出: 当前的 WinHTTP 代理服务器设置: 直接访问(没有代理服务器)。 结论: 系统并未配置全局代理，这解释了为什么命令行工具无法通过VPN。 3. 寻找并测试VPN代理 多数VPN客户端会在本地启动一个HTTP或SOCKS5代理服务。我们需要找到这个服务的地址和端口，并进行测试。
+常见的本地代理地址: 127.0.0.1 (或 localhost) 常见的代理端口: 7890, 1080, 10809, 8888 等 (具体请在您的VPN客户端设置中查找)。 我们使用 curl 命令直接指定代理进行测试，这是最关键的一步。假设通过VPN客户端查到代理是SOCKS5类型，地址是 127.0.0.1:7890。
+使用 curl 指定SOCKS5代理进行测试:
+curl -v --socks5 127.0.0.1:7890 https://www.google.com 成功的标志: 您会看到 * SOCKS5 request granted. 和 * Connected to 127.0.0.1 ... 等信息，最后是Google服务器返回的HTTP响应（例如 HTTP/1.1 301 Moved Permanently 或 HTTP/2 200）。">
+  <meta itemprop="datePublished" content="2025-11-03T10:55:00+00:00">
+  <meta itemprop="dateModified" content="2025-11-03T10:55:00+00:00">
+  <meta itemprop="wordCount" content="145">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="解决命令行无法通过VPN代理访问网络的问题!">
+  <meta name="twitter:description" content="解决在Windows上命令行无法通过VPN代理访问网络的问题 问题描述 当VPN开启时，网页浏览器可以正常访问Google等网站，但在命令行（CMD）或PowerShell中，ping、curl 等工具无法访问这些网站，通常表现为连接超时。
+这通常是因为VPN客户端默认只代理了浏览器或特定应用的流量（分裂隧道模式），而没有为整个系统或命令行环境设置全局代理。
+解决步骤 1. 初步诊断 首先，我们确认问题确实存在于命令行环境中。
+测试外部连接 (Google): ping google.com # 结果: 100%丢包，请求超时 测试内部连接 (Baidu): ping baidu.com # 结果: 成功接收数据，延迟正常 结论: 网络本身是通的，但命令行无法访问被限制的网站，问题指向代理设置。 2. 检查系统代理设置 我们检查Windows系统级别的代理设置，看是否有为命令行工具配置代理。
+使用 netsh 命令检查: netsh winhttp show proxy ���型的问题输出: 当前的 WinHTTP 代理服务器设置: 直接访问(没有代理服务器)。 结论: 系统并未配置全局代理，这解释了为什么命令行工具无法通过VPN。 3. 寻找并测试VPN代理 多数VPN客户端会在本地启动一个HTTP或SOCKS5代理服务。我们需要找到这个服务的地址和端口，并进行测试。
+常见的本地代理地址: 127.0.0.1 (或 localhost) 常见的代理端口: 7890, 1080, 10809, 8888 等 (具体请在您的VPN客户端设置中查找)。 我们使用 curl 命令直接指定代理进行测试，这是最关键的一步。假设通过VPN客户端查到代理是SOCKS5类型，地址是 127.0.0.1:7890。
+使用 curl 指定SOCKS5代理进行测试:
+curl -v --socks5 127.0.0.1:7890 https://www.google.com 成功的标志: 您会看到 * SOCKS5 request granted. 和 * Connected to 127.0.0.1 ... 等信息，最后是Google服务器返回的HTTP响应（例如 HTTP/1.1 301 Moved Permanently 或 HTTP/2 200）。">
+
+	
+  </head><body class="ma0 avenir bg-near-white development">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l center items-center justify-between">
+    <a href="/" class="f3 fw2 hover-white white-90 dib no-underline">
+      
+        Gannicus&#39;s Blog
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      <div class="ananke-socials"></div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  
+  <article class="flex-l mw8 center ph3 flex-wrap justify-between">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked ttu">
+          
+        Posts
+      </aside><div id="sharing" class="mt3 ananke-socials"></div>
+<h1 class="f1 athelas mt3 mb1">解决命令行无法通过VPN代理访问网络的问题!</h1>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2025-11-03T10:55:00Z">November 3, 2025</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><h1 id="解决在windows上命令行无法通过vpn代理访问网络的问题">解决在Windows上命令行无法通过VPN代理访问网络的问题</h1>
+<h2 id="问题描述">问题描述</h2>
+<p>当VPN开启时，网页浏览器可以正常访问Google等网站，但在命令行（CMD）或PowerShell中，<code>ping</code>、<code>curl</code> 等工具无法访问这些网站，通常表现为连接超时。</p>
+<p>这通常是因为VPN客户端默认只代理了浏览器或特定应用的流量（分裂隧道模式），而没有为整个系统或命令行环境设置全局代理。</p>
+<h2 id="解决步骤">解决步骤</h2>
+<h3 id="1-初步诊断">1. 初步诊断</h3>
+<p>首先，我们确认问题确实存在于命令行环境中。</p>
+<ul>
+<li><strong>测试外部连接 (Google):</strong>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ping google.com
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 结果: 100%丢包，请求超时</span>
+</span></span></code></pre></div></li>
+<li><strong>测试内部连接 (Baidu):</strong>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ping baidu.com
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 结果: 成功接收数据，延迟正常</span>
+</span></span></code></pre></div></li>
+<li><strong>结论:</strong> 网络本身是通的，但命令行无法访问被限制的网站，问题指向代理设置。</li>
+</ul>
+<h3 id="2-检查系统代理设置">2. 检查系统代理设置</h3>
+<p>我们检查Windows系统级别的代理设置，看是否有为命令行工具配置代理。</p>
+<ul>
+<li><strong>使用 <code>netsh</code> 命令检查:</strong>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>netsh winhttp show proxy
+</span></span></code></pre></div></li>
+<li><strong>���型的问题输出:</strong>
+<pre tabindex="0"><code>当前的 WinHTTP 代理服务器设置:
+
+    直接访问(没有代理服务器)。
+</code></pre></li>
+<li><strong>结论:</strong> 系统并未配置全局代理，这解释了为什么命令行工具无法通过VPN。</li>
+</ul>
+<h3 id="3-寻找并测试vpn代理">3. 寻找并测试VPN代理</h3>
+<p>多数VPN客户端会在本地启动一个HTTP或SOCKS5代理服务。我们需要找到这个服务的地址和端口，并进行测试。</p>
+<ul>
+<li><strong>常见的本地代理地址:</strong> <code>127.0.0.1</code> (或 <code>localhost</code>)</li>
+<li><strong>常见的代理端口:</strong> <code>7890</code>, <code>1080</code>, <code>10809</code>, <code>8888</code> 等 (具体请在您的VPN客户端设置中查找)。</li>
+</ul>
+<p>我们使用 <code>curl</code> 命令直接指定代理进行测试，这是最关键的一步。假设通过VPN客户端查到代理是SOCKS5类型，地址是 <code>127.0.0.1:7890</code>。</p>
+<ul>
+<li>
+<p><strong>使用 <code>curl</code> 指定SOCKS5代理进行测试:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -v --socks5 127.0.0.1:7890 https://www.google.com
+</span></span></code></pre></div></li>
+<li>
+<p><strong>成功的标志:</strong>
+您会看到 <code>* SOCKS5 request granted.</code> 和 <code>* Connected to 127.0.0.1 ...</code> 等信息，最后是Google服务器返回的HTTP响应（例如 <code>HTTP/1.1 301 Moved Permanently</code> 或 <code>HTTP/2 200</code>）。</p>
+</li>
+<li>
+<p><strong>结论:</strong> 这证明了代理服务是正常的，我们只需要让所有命令行工具都使用它。</p>
+</li>
+</ul>
+<h3 id="4-配置环境变量-最终解决方案">4. 配置环境变量 (最终解决方案)</h3>
+<p>为了让所有命令行工具自动使用这个SOCKS5代理��我们需要设置一个标准的环境变量。<code>ALL_PROXY</code> 是一个被广泛支持的变量。</p>
+<h4 id="临时设置-只在当前窗口有效">临时设置 (只在当前窗口有效)</h4>
+<ul>
+<li><strong>在 PowerShell 中:</strong>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>$env:ALL_PROXY=<span style="color:#e6db74">&#34;socks5://127.0.0.1:7890&#34;</span>
+</span></span><span style="display:flex;"><span>$env:HTTP_PROXY=<span style="color:#e6db74">&#34;socks5://127.0.0.1:7890&#34;</span>
+</span></span><span style="display:flex;"><span>$env:HTTPS_PROXY=<span style="color:#e6db74">&#34;socks5://127.0.0.1:7890&#34;</span>
+</span></span></code></pre></div></li>
+</ul>
+<h1 id="设置环境变量">设置环境变量</h1>
+<p>$env:HTTP_PROXY = &ldquo;http://127.0.0.1:7890&rdquo;
+$env:HTTPS_PROXY = &ldquo;http://127.0.0.1:7890&rdquo;</p>
+<h1 id="或者使用-netsh-命令设置系统代理">或者使用 netsh 命令设置系统代理</h1>
+<p>netsh winhttp set proxy proxy-server:port
+```</p>
+<ul>
+<li><strong>在 CMD 中:</strong>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span><span style="color:#66d9ef">set</span> ALL_PROXY=socks5://127.0.0.1:7890
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> HTTP_PROXY=http://127.0.0.1:7890
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> HTTPS_PROXY=http://127.0.0.1:7890
+</span></span></code></pre></div><strong>注意:</strong> <code>socks5://</code> 这个前缀至关重要。</li>
+</ul>
+<h4 id="永久设置-所有新开的终端都有效">永久设置 (所有新开的终端都有效)</h4>
+<p>要让这个设置永久生效，需要将其添加到Windows的系统环境变量中。</p>
+<ol>
+<li>按 <code>Win</code> 键，搜索“编辑系统环境变量”并打开它。</li>
+<li>在“高级”选项卡下，点击“环境变量&hellip;”按钮。</li>
+<li>在“用户变量”或“系统变量”区域，点击“新建&hellip;”。
+<ul>
+<li><strong>变量名:</strong> <code>ALL_PROXY</code></li>
+<li><strong>变量值:</strong> <code>socks5://127.0.0.1:7890</code></li>
+</ul>
+</li>
+<li>点击“确定”保存所有窗口。</li>
+<li><strong>重启</strong>所有已打开的命令行窗口，新的设置将会生效。</li>
+</ol>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href="http://localhost:1313/" >
+    &copy;  Gannicus's Blog 2025 
+  </a>
+    <div><div class="ananke-socials"></div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>

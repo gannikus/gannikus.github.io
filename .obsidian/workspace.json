@@ -143,13 +143,23 @@
               "icon": "lucide-list",
               "title": "大纲"
             }
+          },
+          {
+            "id": "bfa4bfa4d0013b92",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -159,11 +169,25 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "bases:创建新数据库": false
+      "bases:创建新数据库": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
+      "obsidian-git:Open Git source control": false
     }
   },
   "active": "80a9fd80710a7153",
   "lastOpenFiles": [
-    "未命名.base"
+    "_site/jekyll/update/2025/11/03/welcome-to-jekyll.html",
+    "_site/jekyll/update/2025/11/03",
+    "_site/jekyll/update/2025/11",
+    "_site/jekyll/update/2025",
+    "_site/jekyll/update",
+    "_site/assets/minima-social-icons.svg",
+    "_site/assets/main.css.map",
+    "_site/assets/main.css",
+    "_site/about/index.html",
+    "_site/jekyll",
+    "_site/README.md",
+    "_site/index.html",
+    "_site/feed.xml"
   ]
 }

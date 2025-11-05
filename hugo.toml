@@ -1,8 +1,121 @@
 baseURL = "https://gannikus.github.io/"
 languageCode = "zh-cn"
 title = "Gannicus's Blog"
-theme = "ananke" 
- 
-[taxonomies]
-	tag = "tags"
-	category = "categories"
+theme = "hugo-theme-stack" 
+
+# Theme i18n support
+DefaultContentLanguage = "zh-cn"
+# Set hasCJKLanguage to true if DefaultContentLanguage is in [zh-cn ja ko]
+hasCJKLanguage = true
+
+[[permalinks]] # Changed from permalinks: to [[permalinks]] to define a TOML table
+    post = "/p/:slug/"
+    page = "/:slug/"
+
+[params]
+    mainSections = ["post"]
+    rssFullContent = true
+    favicon = "/favicon.png"
+
+    [params.footer]
+        since = 2020
+        customText = ""
+
+    [params.dateFormat]
+        published = "Jan 02, 2006"
+        lastUpdated = "Jan 02, 2006 15:04 MST"
+
+    [params.sidebar]
+        emoji = "🍥"
+        subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        [params.sidebar.avatar]
+            enabled = true
+            local = true
+            src = "/img/avatar.jpg"
+
+    [params.article]
+        math = false
+        toc = true
+        readingTime = true
+        [params.article.license]
+            enabled = true
+            default = "Licensed under CC BY-NC-SA 4.0"
+
+    [params.comments]
+        enabled = true
+        provider = "disqus" # or other provider
+        # ... other comment provider settings
+
+    [params.widgets]
+        homepage = [
+            { type = "search" },
+            { type = "archives", params = { limit = 5 }},
+            { type = "categories", params = { limit = 10 }},
+            { type = "tag-cloud", params = { limit = 10 }}
+        ]
+        page = [
+            { type = "toc" },
+            { type = "search" },
+            { type = "categories", params = { limit = 10 }},
+            { type = "tag-cloud", params = { limit = 20 }}
+        ]
+
+    [params.opengraph.twitter]
+        card = "summary_large_image"
+
+    [params.defaultImage.opengraph]
+        enabled = false
+        local = false
+        src = ""
+
+    [params.colorScheme]
+        toggle = true
+        default = "auto"
+
+    [params.imageProcessing.cover]
+        enabled = true
+
+    [params.imageProcessing.content]
+        enabled = true
+
+[menu]
+    [[menu.main]]
+        identifier = "home"
+        name = "Home"
+        url = "/"
+        weight = 10
+        [menu.main.params]
+            icon = "home"
+            newTab = true
+
+    [[menu.social]]
+        identifier = "github"
+        name = "gannikus"
+        url = "https://gannikus.github.io/"
+        [menu.social.params]
+            icon = "brand-github"
+
+    [[menu.social]]
+        identifier = "twitter"
+        name = "Twitter"
+        url = "https://twitter.com"
+        [menu.social.params]
+            icon = "brand-twitter"
+
+[markup.goldmark.renderer]
+    # Set to true if you have HTML content inside Markdown
+    unsafe = true
+
+[markup.tableOfContents]
+    endLevel = 4
+    ordered = true
+    startLevel = 2
+
+[markup.highlight]
+    noClasses = false
+    codeFences = true
+    guessSyntax = true
+    lineNoStart = 1
+    lineNos = true
+    lineNumbersInTable = true
+    tabWidth = 4

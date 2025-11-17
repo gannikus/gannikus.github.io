@@ -1,6 +1,6 @@
 ---
 title: "trueNas代理"
-date: 2023-11-12T10:00:00+08:00
+date: 2025-11-12T10:00:00+08:00
 draft: false  # 确保这不是草稿
 author: "Gannicus"
 # --- 重点在这里 ---
